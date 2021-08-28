@@ -51,6 +51,7 @@ mixin ApiError {
 
       /// On inline error
       if (onError != null) {
+
         await onError(error);
       }
 

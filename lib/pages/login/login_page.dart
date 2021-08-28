@@ -24,7 +24,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends PageStateful<LoginPage> with WidgetsBindingObserver, ApiError {
-  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _idFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
   LoginProvider loginProvider;
@@ -41,7 +41,7 @@ class _LoginPageState extends PageStateful<LoginPage> with WidgetsBindingObserve
 
     /// Init email focus
     /// autofocus in TextField has an issue on next keyboard button
-    _emailFocusNode.requestFocus();
+    _idFocusNode.requestFocus();
   }
 
   @override
@@ -84,25 +84,15 @@ class _LoginPageState extends PageStateful<LoginPage> with WidgetsBindingObserve
 
                 /// Login form
                 /// Email + password
-                Selector<LoginProvider, bool>(
-                  selector: (_, LoginProvider provider) => provider.emailValid,
-                  builder: (_, bool emailValid, __) {
-                    return WInputForm.email(
-                      key: const Key('emailInputKey'),
-                      labelText: context.strings.labelEmail,
-                      onChanged: loginProvider.onEmailChangeToValidateForm,
-                      focusNode: _emailFocusNode,
-                      textInputAction: TextInputAction.next,
-                      errorText: !emailValid ? context.strings.msgEmailInValid : null,
-                      suffixIcon: !emailValid
-                          ? const Icon(
-                              Icons.error,
-                            )
-                          : null,
-                      onSubmitted: (String term) {
-                        AppHelper.nextFocus(context, _emailFocusNode, _passwordFocusNode);
-                      },
-                    );
+                WInputForm.number(
+                  key: const Key('idInputKey'),
+                  labelText: context.strings.labelID,
+                  onChanged: loginProvider.onIDChangeToValidateForm,
+                  focusNode: _idFocusNode,
+                  textInputAction: TextInputAction.next,
+
+                  onSubmitted: (String term) {
+                    AppHelper.nextFocus(context, _idFocusNode, _passwordFocusNode);
                   },
                 ),
                 SizedBox(height: 20.H),
@@ -132,8 +122,10 @@ class _LoginPageState extends PageStateful<LoginPage> with WidgetsBindingObserve
                   key: const Key('callApiBtnKey'),
                   onPressed: context.select((LoginProvider provider) => provider.formValid)
                       ? () async {
+                    print("loginProvider.idValue "+loginProvider.idValue.toString());
+                    print("loginProvider.passwordValue "+loginProvider.passwordValue.toString());
                           final bool success = await apiCallSafety(
-                            () => authProvider.login(null, null),
+                            () => authProvider.login(loginProvider.idValue, loginProvider.passwordValue),
                             onStart: () async {
                               AppLoading.show(context);
                             },
@@ -142,6 +134,7 @@ class _LoginPageState extends PageStateful<LoginPage> with WidgetsBindingObserve
                             },
                             onError: (dynamic error) async {
                               final ApiErrorType errorType = parseApiErrorType(error);
+                              print("errorType.message "+errorType.message.toString());
                               AppDialog.show(
                                 context,
                                 errorType.message,
@@ -158,45 +151,7 @@ class _LoginPageState extends PageStateful<LoginPage> with WidgetsBindingObserve
                   child: Text(context.strings.btnLogin),
                 ),
 
-                /// Example call api with success http code but with error response,
-                /// and how to use function response data instead property approach.
-                ElevatedButton(
-                  key: const Key('callApiErrorBtnKey'),
-                  onPressed: () async {
-                    final LoginResponse loginResponse = await apiCallSafety(
-                      authProvider.logInWithError,
-                      onStart: () async {
-                        AppLoading.show(context);
-                      },
-                      onCompleted: (bool status, LoginResponse res) async {
-                        AppLoading.hide(context);
-                      },
-                    );
-                    logger.d(loginResponse);
-                    if (loginResponse.error != null) {
-                      AppDialog.show(context, loginResponse.error.message);
-                    }
-                  },
-                  child: const Text('call api with error'),
-                ),
 
-                /// Example call api with exception return to ui
-                /// Note: Exception make app can not hide the app loading with previous ways
-                ElevatedButton(
-                  key: const Key('callApiExceptionBtnKey'),
-                  onPressed: () async {
-                    apiCallSafety(
-                      authProvider.logInWithException,
-                      onStart: () async {
-                        AppLoading.show(context);
-                      },
-                      onCompleted: (bool status, void res) async {
-                        AppLoading.hide(context);
-                      },
-                    );
-                  },
-                  child: const Text('call api with exception'),
-                ),
 
                 SizedBox(height: 30.H),
 

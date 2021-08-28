@@ -33,7 +33,21 @@ class WInputForm extends StatefulWidget {
     this.textInputAction = TextInputAction.next,
     this.keyboardType = TextInputType.emailAddress,
   }) : super(key: key);
-
+  const WInputForm.number({
+    Key key,
+    this.controller,
+    this.labelText = 'ID',
+    this.errorText,
+    this.suffixIcon,
+    this.obscureText = false,
+    this.onTap,
+    this.readOnly = false,
+    this.onChanged,
+    this.onSubmitted,
+    this.focusNode,
+    this.textInputAction = TextInputAction.next,
+    this.keyboardType = TextInputType.number,
+  }) : super(key: key);
   const WInputForm.password({
     Key key,
     this.controller,

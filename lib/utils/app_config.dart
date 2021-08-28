@@ -18,7 +18,7 @@ class Env {
   factory Env.dev() {
     return Env._(
       envType: EnvType.dev,
-      apiBaseUrl: 'https://nhancv.free.beeceptor.com',
+      apiBaseUrl: 'https://api-gateway.stg.pharmacity.io',
     );
   }
 

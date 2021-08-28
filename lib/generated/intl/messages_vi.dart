@@ -24,6 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "btnLogin" : MessageLookupByLibrary.simpleMessage("Đăng nhập"),
     "hello" : MessageLookupByLibrary.simpleMessage("xin chào"),
     "labelEmail" : MessageLookupByLibrary.simpleMessage("Email"),
+    "labelId":MessageLookupByLibrary.simpleMessage("Mã Nhân Viên"),
     "labelPassword" : MessageLookupByLibrary.simpleMessage("Password"),
     "msgEmailInValid" : MessageLookupByLibrary.simpleMessage("Email không hợp lệ")
   };

@@ -1,27 +1,32 @@
 /*
 Normal
 {
+  "result": "success",
     "data": any,
-    "error": null
+    "error": "",
+    "errorCode": ""
 }
 Error
 {
+  "result": "fail",
     "data": null,
-    "error": {
-            "code": 1029,
-            "message": "User not found!."
-        }
+    "error": "unauthenticated",
+    "errorCode":401
 }
  */
 import 'dart:core';
 
 class BaseResponse<T> {
-  BaseResponse(Map<String, dynamic> fullJson, {String dataKey = 'data', String errorKey = 'error'}) {
+  BaseResponse(Map<String, dynamic> fullJson,
+      {String dataKey = 'data', String errorKey = 'error'}) {
     parsing(fullJson, dataKey: dataKey, errorKey: errorKey);
   }
 
   T data;
-  BaseError error;
+  String errorCode;
+  String error;
+
+  // BaseError error;
 
   /// Abstract json to data
   T jsonToData(dynamic dataJson) {
@@ -35,19 +40,25 @@ class BaseResponse<T> {
 
   /// Parsing data to object
   /// dataKey = null mean parse from root
-  dynamic parsing(Map<String, dynamic> fullJson, {String dataKey = 'data', String errorKey = 'error'}) {
+  dynamic parsing(Map<String, dynamic> fullJson,
+      {String dataKey = 'data',
+      String errorKey = 'error',
+      String errorCodeKey = 'errorCode'}) {
     if (fullJson != null) {
       final dynamic dataJson = dataKey != null ? fullJson[dataKey] : fullJson;
-      final dynamic errorJson = errorKey != null ? fullJson[errorKey] : fullJson;
+
       data = dataJson != null ? jsonToData(dataJson) : null;
-      error = errorJson != null ? BaseError.fromJson(errorJson as Map<String, dynamic>) : null;
+      errorCode =
+          errorCodeKey != null ? fullJson[errorCodeKey].toString() : null;
+      error = errorKey != null ? fullJson[errorKey].toString() : null;
     }
   }
 
   /// Data to json
   Map<String, dynamic> toJson() => <String, dynamic>{
         'data': data != null ? dataToJson(data) : null,
-        'error': error?.toJson(),
+        'error': error,
+        'errorCode': errorCode
       };
 
   @override
@@ -56,30 +67,30 @@ class BaseResponse<T> {
   }
 }
 
-class BaseError {
-  BaseError({
-    this.code,
-    this.message,
-  });
-
-  factory BaseError.fromJson(Map<String, dynamic> json) => BaseError(
-        code: json['code'] as int,
-        message: json['message'] as String,
-      );
-
-  int code;
-  String message;
-
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'code': code,
-        'message': message,
-      };
-
-  @override
-  String toString() {
-    return 'BaseError{code: $code, message: $message}';
-  }
-}
+// class BaseError {
+//   BaseError({
+//     this.code,
+//     this.message,
+//   });
+//
+//   factory BaseError.fromJson(Map<String, dynamic> json) => BaseError(
+//         code: json['code'] as int,
+//         message: json['message'] as String,
+//       );
+//
+//   int code;
+//   String message;
+//
+//   Map<String, dynamic> toJson() => <String, dynamic>{
+//         'code': code,
+//         'message': message,
+//       };
+//
+//   @override
+//   String toString() {
+//     return 'BaseError{code: $code, message: $message}';
+//   }
+// }
 
 /// Example
 ///*

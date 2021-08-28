@@ -18,9 +18,10 @@ class AuthProvider extends ChangeNotifierSafety {
   void resetState() {}
 
   /// Call api login
-  Future<bool> login(String email, String password) async {
+  Future<bool> login(String id, String password) async {
     final Response<Map<String, dynamic>> result =
-        await _api.logIn(email, password).timeout(const Duration(seconds: 30));
+        await _api.logIn(id, password).timeout(const Duration(seconds: 30));
+    print("result "+result.toString());
     final LoginResponse loginResponse = LoginResponse(result.data);
     final Token token = loginResponse.data;
     if (token != null) {
@@ -29,7 +30,7 @@ class AuthProvider extends ChangeNotifierSafety {
       return saveRes;
     } else {
       throw DioError(
-          requestOptions: null, error: loginResponse.error?.message ?? 'Login error', type: DioErrorType.response);
+          requestOptions: null, error: loginResponse.error ?? 'Login error', type: DioErrorType.response);
     }
   }
 

@@ -68,6 +68,7 @@ class _HomePageState extends PageStateful<HomePage> with WidgetsBindingObserver,
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return PAppBarEmpty(
       child: WKeyboardDismiss(
         child: Container(

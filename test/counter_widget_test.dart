@@ -6,6 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider_state_management/pages/counter/counter_page.dart';
 import 'package:provider_state_management/pages/counter/counter_provider.dart';
@@ -29,8 +30,11 @@ void main() {
                 create: (_) => AppThemeProvider())
           ],
           builder: (_, __) {
-            return MaterialApp(
-              home: widget,
+            return ScreenUtilInit(
+              designSize: const Size(375, 812),
+              builder: () => MaterialApp(
+                home: widget,
+              ),
             );
           }),
     );

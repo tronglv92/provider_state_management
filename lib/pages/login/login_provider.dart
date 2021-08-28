@@ -4,16 +4,21 @@ import 'package:provider_state_management/services/safety/change_notifier_safety
 class LoginProvider extends ChangeNotifierSafety {
   LoginProvider();
 
-  ///#region PRIVATE PROPERTIES
-  /// -----------------
-  /// Store email value
-  String _emailValue = '';
+  // ///#region PRIVATE PROPERTIES
+  // /// -----------------
+  // /// Store email value
+  // String _emailValue = '';
+  //
+  // /// Flag to check email is valid or not
+  // bool _emailValid = false;
 
-  /// Flag to check email is valid or not
-  bool _emailValid = false;
+  String _idValue='';
+  String get idValue=>_idValue;
+
 
   /// Store password value
   String _passwordValue = '';
+  String get passwordValue=>_passwordValue;
 
   /// Flag to visible password field
   bool _obscureText = true;
@@ -26,12 +31,13 @@ class LoginProvider extends ChangeNotifierSafety {
   ///#region PUBLIC PROPERTIES
   /// -----------------
 
-  bool get emailValid => _emailValid;
+  // bool get emailValid => _emailValid;
+  //
+  // set emailValid(bool value) {
+  //   _emailValid = value;
+  //   notifyListeners();
+  // }
 
-  set emailValid(bool value) {
-    _emailValid = value;
-    notifyListeners();
-  }
 
   bool get obscureText => _obscureText;
 
@@ -54,8 +60,8 @@ class LoginProvider extends ChangeNotifierSafety {
   /// Reset state
   @override
   void resetState() {
-    _emailValue = '';
-    _emailValid = false;
+    _idValue = '';
+
     _passwordValue = '';
     _obscureText = true;
     _formValid = false;
@@ -64,18 +70,22 @@ class LoginProvider extends ChangeNotifierSafety {
 
   /// Validate from
   void _validateForm() {
-    formValid = emailValid && _passwordValue.isNotEmpty;
+    formValid = _idValue.isNotEmpty && _passwordValue.isNotEmpty;
   }
 
-  /// On email input change listener to validate form
-  void onEmailChangeToValidateForm(final String email) {
-    _emailValue = email;
-    emailValid = EmailValidator.validate(_emailValue);
-
+  // /// On email input change listener to validate form
+  // void onEmailChangeToValidateForm(final String email) {
+  //   _emailValue = email;
+  //   emailValid = EmailValidator.validate(_emailValue);
+  //
+  //   /// Update form valid
+  //   _validateForm();
+  // }
+  void onIDChangeToValidateForm(final String id) {
+    _idValue = id;
     /// Update form valid
     _validateForm();
   }
-
   /// On password input change listener to validate form
   void onPasswordChangeToValidateForm(final String password) {
     _passwordValue = password;
