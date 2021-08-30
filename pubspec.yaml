@@ -1,6 +1,6 @@
 name: provider_state_management
 description: Flutter is Google’s UI toolkit for building beautiful, natively compiled applications for mobile, web, and desktop from a single codebase. This template is created by nhancv.
-version: 2.0.0+202106001
+version: 2.0.0+202106003
 
 
 environment:
